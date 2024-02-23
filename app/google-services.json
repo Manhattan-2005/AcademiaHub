@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230699848730",
+    "project_id": "gp-cm-connect",
+    "storage_bucket": "gp-cm-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230699848730:android:5a65627dcaad747d792da3",
+        "android_client_info": {
+          "package_name": "com.gpcmconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIfNp1yZGZx6RtzIa77a9OEN6-8EoHqEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_home"
+        android:icon="@drawable/home_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/home"
+        android:textColor="@color/white" />
+
+    <item
+        android:id="@+id/bottom_events"
+        android:icon="@drawable/events_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/events" />
+    <item
+        android:id="@+id/bottom_users"
+        android:icon="@drawable/users_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/users" />
+    <item
+        android:id="@+id/bottom_profile"
+        android:icon="@drawable/profile_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/profile" />
+</menu>
