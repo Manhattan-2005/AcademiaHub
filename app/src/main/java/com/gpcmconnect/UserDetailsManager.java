@@ -37,7 +37,7 @@ public class UserDetailsManager {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        username = Objects.requireNonNull(document.get("username")).toString();
+                        username = document.get("username").toString();
                     } else {
                         Log.d("fetch_exception", "No such document");
                     }
@@ -64,19 +64,23 @@ public class UserDetailsManager {
         if(username != null) {
             return username;
         } else {
-            return "User";
+            return null;
         }
     }
 
-    public Map<String, Object> getUserDetails() {
-        HashMap<String, Object> userDetails = new HashMap<String, Object>();
-        userDetails.put("name", name);
-        userDetails.put("email", email);
-        userDetails.put("designation", designation);
-        userDetails.put("username", username);
-        userDetails.put("profile", profile);
+//    public Map<String, Object> getUserDetails() {
+//        HashMap<String, Object> userDetails = new HashMap<String, Object>();
+//        userDetails.put("name", name);
+//        userDetails.put("email", email);
+//        userDetails.put("designation", designation);
+//        userDetails.put("username", username);
+//        userDetails.put("profile", profile);
+//
+//        return userDetails;
+//    }
 
-        return userDetails;
+    public void clearUserDetails() {
+        instance = null;
     }
 
 }

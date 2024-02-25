@@ -67,13 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Fragment fragment = fragmentMap.get(item.getItemId());
                 if (fragment != null) {
-                    if(item.getItemId() == R.id.bottom_home){
-                        UserDetailsManager userDataManager = UserDetailsManager.getInstance();
-                        username = userDataManager.getUsername();
-                        Bundle args = new Bundle();
-                        args.putString("username", username);
-                        fragment.setArguments(args);
-                    }
                     replaceFragment(fragment);
                 }
                 return true;
@@ -99,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             ie.printStackTrace();
         }
         FirebaseAuth.getInstance().signOut();
+        UserDetailsManager.getInstance().clearUserDetails();
         Intent intent = new Intent(getApplicationContext(), Login.class);
         startActivity(intent);
         finish();

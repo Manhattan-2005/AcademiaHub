@@ -29,13 +29,11 @@ public class HomePage_Fragment extends Fragment {
     String username;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user == null) {
-            Intent intent = new Intent(getContext(), Login.class);
-            startActivity(intent);
-        }
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
+        UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
+        username = userDetailsManager.getUsername();
     }
 
     @Override
@@ -44,45 +42,42 @@ public class HomePage_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         TextView greet = view.findViewById(R.id.username);
 
-        DocumentReference docRef = db.collection("users").document(user.getUid());
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        username = document.get("username").toString();
-                        greet.setText("Hello, " + username);
-                    } else {
-                        Log.d("fetch_exception", "No such document");
+        if(username == null) {
+            UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
+            username = userDetailsManager.getUsername();
+        }
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user != null) {
+            if(username != null) {
+                greet.setText("Hello, " + username);
+            } else {
+                DocumentReference docRef = db.collection("users").document(user.getUid());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                username = document.get("username").toString();
+                                greet.setText("Hello, " + username);
+                            } else {
+                                Log.d("fetch_exception", "No such document");
+                            }
+                        } else {
+                            Log.d("fetch_exception", "get failed with ", task.getException());
+                        }
                     }
-                } else {
-                    Log.d("fetch_exception", "get failed with ", task.getException());
-                }
+                });
             }
-        });
+        } else {
+            Intent intent  = new Intent(getContext(), Login.class);
+            startActivity(intent);
+            onStop();
+            onDestroy();
+        }
 
         return view;
     }
-
-    public void fetchUsername(TextView greet) {
-        DocumentReference docRef = db.collection("users").document(Objects.requireNonNull(FirebaseAuth.getInstance().getUid()));
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        username = document.get("username").toString();
-                        greet.setText("Hello, " + username);
-                    } else {
-                        Log.d("fetch_exception", "No such document");
-                    }
-                } else {
-                    Log.d("fetch_exception", "get failed with ", task.getException());
-                }
-            }
-        });
-    }
-
 }
