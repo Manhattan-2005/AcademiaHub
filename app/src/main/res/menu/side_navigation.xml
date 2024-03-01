@@ -5,8 +5,7 @@
     tools:showIn="navigation_view">
 
     <group
-        android:checkableBehavior="single"
-        android:title="@string/basic_actions">
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_home"
@@ -28,10 +27,12 @@
                 android:icon="@drawable/instagram_icon" />
             <item
                 android:id="@+id/linkedin"
-                android:title="@string/linked_in"/>
+                android:title="@string/linked_in"
+                android:icon="@drawable/linkedin_icon" />
             <item
                 android:id="@+id/github"
-                android:title="@string/github"/>
+                android:title="@string/github"
+                android:icon="@drawable/github_icon" />
         </menu>
 
     </item>

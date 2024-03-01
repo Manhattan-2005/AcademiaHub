@@ -7,58 +7,72 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Events_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+
 public class Events_Fragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Events_Fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Events_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Events_Fragment newInstance(String param1, String param2) {
-        Events_Fragment fragment = new Events_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private ArrayAdapter<String> adapter;
+    private ArrayList<String> completed, ongoing;
+    TabLayout tabs;
+    TabLayout.Tab ongoingTab;
+    TabLayout.Tab completedTab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_events, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_events, container, false);
+
+        ListView listView = view.findViewById(R.id.listOfEvents);
+
+        ongoing = new ArrayList<>();
+        ongoing.add("Summer 2024");
+        ongoing.add("Farewell");
+        ongoing.add("Competition");
+
+        completed = new ArrayList<>();
+        completed.add("Unit Test 1");
+        completed.add("Unit Test 2");
+        completed.add("Freshers");
+        completed.add("Competitions");
+
+        tabs = view.findViewById(R.id.tabs);
+        ongoingTab = tabs.getTabAt(0); // Index 0 for the first tab (ongoing_events)
+        completedTab = tabs.getTabAt(1);
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.equals(ongoingTab)) {
+                    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ongoing);
+                } else if (tab.equals(completedTab)) {
+                    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, completed);
+                }
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // Optional: handle unselection events
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Optional: handle reselection events
+            }
+        });
+
+        return view;
     }
 }

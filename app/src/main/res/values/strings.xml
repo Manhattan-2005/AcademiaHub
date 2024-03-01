@@ -31,4 +31,7 @@
     <string name="github">GitHub</string>
     <string name="enter_user_name">Enter User Name</string>
     <string name="basic_actions">Basic Actions</string>
+    <string name="syllabus">View Syllabus</string>
+    <string name="completed_events">Completed</string>
+    <string name="ongoing_events">Ongoing</string>
 </resources>

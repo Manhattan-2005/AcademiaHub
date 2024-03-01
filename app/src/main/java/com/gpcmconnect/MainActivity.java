@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
     FirebaseUser user;
     FirebaseFirestore db;
     private String username;

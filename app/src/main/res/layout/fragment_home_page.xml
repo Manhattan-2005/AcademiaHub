@@ -3,63 +3,231 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/fragment_container"
     android:layout_height="match_parent"
     tools:context=".HomePage_Fragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_height="match_parent">
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hello_user"
+            android:layout_marginTop="-40dp"
             android:textSize="30sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:text="@string/what_would_you_like_to_do"
             android:textSize="20sp" />
 
         <androidx.gridlayout.widget.GridLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            app:columnCount="2">
+            app:columnCount="2"
+            app:rowCount="2" >
 
-            <Button
-                android:layout_height="150dp"
-                android:layout_weight="1"
+            <!--      View Events      -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/view_events"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/homepage_buttons" />
+                app:cardCornerRadius="25dp"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_horizontal"
+                app:layout_row="0"
+                app:layout_rowWeight="1">
 
-            <Button
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:background="@drawable/homepage_buttons" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/homepage_buttons"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-            <Button
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:layout_margin="10dp"
-                android:background="@drawable/homepage_buttons" />
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/bg_color"
+                        android:src="@drawable/events_icon_dark"
+                        android:contentDescription="@string/view_events" />
 
-            <Button
-                android:layout_height="150dp"
-                android:layout_weight="1"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/view_events"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--      View syllabus      -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/view_syllabus"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/homepage_buttons" />
+                app:cardCornerRadius="25dp"
+                app:cardElevation="12dp"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_horizontal"
+                app:layout_row="0"
+                app:layout_rowWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/homepage_buttons"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/bg_color"
+                        android:src="@drawable/syllabus_icon"
+                        android:contentDescription="@string/syllabus" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/syllabus"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--     Add Event (Only for admin)      -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/add_event"
+                android:visibility="gone"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="12dp"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_horizontal"
+                app:layout_row="0"
+                app:layout_rowWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/homepage_buttons"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/bg_color"
+                        android:src="@drawable/add_event_icon_dark"
+                        android:contentDescription="@string/add_event" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/add_event"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--      View Users      -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/view_users"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                app:cardCornerRadius="25dp"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_horizontal"
+                app:layout_row="1"
+                app:layout_rowWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/homepage_buttons"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/bg_color"
+                        android:src="@drawable/users_icon_dark"
+                        android:contentDescription="@string/view_users" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/view_users"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--      View Profile      -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/view_profile"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                app:cardCornerRadius="25dp"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_gravity="center_horizontal"
+                app:layout_row="1"
+                app:layout_rowWeight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/homepage_buttons"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:backgroundTint="@color/bg_color"
+                        android:src="@drawable/profile_icon_dark"
+                        android:contentDescription="@string/profile" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/profile"
+                        android:textSize="17sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
 
         </androidx.gridlayout.widget.GridLayout>
 
     </LinearLayout>
-
 </FrameLayout>
