@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Events_Fragment"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Events_Fragment">
 
-    <!--   only for admin   -->
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/event_navigators"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
+        android:id="@+id/event_grid_for_admin"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        android:layout_gravity="center"
         app:columnCount="1"
         app:rowCount="2">
 
         <!--      View Events      -->
         <androidx.cardview.widget.CardView
             android:id="@+id/view_events"
+            android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_margin="10dp"
-            android:layout_width="160dp"
             app:cardCornerRadius="25dp"
             app:layout_column="0"
             app:layout_columnWeight="1"
@@ -31,23 +30,23 @@
             app:layout_rowWeight="1">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/homepage_buttons"
                 android:gravity="center"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:backgroundTint="@color/bg_color"
                     android:contentDescription="@string/view_events"
-                    android:layout_height="70dp"
-                    android:layout_width="70dp"
                     android:src="@drawable/events_icon_dark" />
 
                 <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
                     android:text="@string/view_events"
                     android:textSize="17sp" />
 
@@ -55,12 +54,12 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!--     Add Event (Only for admin)      -->
+        <!--     Add Event     -->
         <androidx.cardview.widget.CardView
             android:id="@+id/add_event"
+            android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_margin="10dp"
-            android:layout_width="160dp"
             app:cardCornerRadius="25dp"
             app:cardElevation="12dp"
             app:layout_column="0"
@@ -70,23 +69,23 @@
             app:layout_rowWeight="1">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/homepage_buttons"
                 android:gravity="center"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:backgroundTint="@color/bg_color"
                     android:contentDescription="@string/add_event"
-                    android:layout_height="70dp"
-                    android:layout_width="70dp"
                     android:src="@drawable/add_event_icon_dark" />
 
                 <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
                     android:text="@string/add_event"
                     android:textSize="17sp" />
 

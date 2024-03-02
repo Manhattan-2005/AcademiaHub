@@ -31,7 +31,7 @@ public class HomePage_Fragment extends Fragment {
 
     FirebaseUser user;
     FirebaseFirestore db;
-    String username;
+    String username, designation;
     CardView add_event, view_events, view_users, view_profile, view_syllabus;
 
     @Override
@@ -44,6 +44,7 @@ public class HomePage_Fragment extends Fragment {
         //set the username from the UserDetailsManager
         UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
         username = userDetailsManager.getUsername();
+        designation = userDetailsManager.getDesignation();
     }
 
     @Override
@@ -52,6 +53,8 @@ public class HomePage_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         TextView greet = view.findViewById(R.id.username);
 
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
         //initialise the CardViews
         view_events = view.findViewById(R.id.view_events);
         add_event = view.findViewById(R.id.add_event); //only for admin
@@ -59,6 +62,10 @@ public class HomePage_Fragment extends Fragment {
         view_users = view.findViewById(R.id.view_users);
         view_profile = view.findViewById(R.id.view_profile);
 
+        if(designation!=null && designation.equals("admin")) {
+            add_event.setVisibility(View.VISIBLE);
+            view_syllabus.setVisibility(View.GONE);
+        }
 
         //set username if not already set
         if(username == null) {
@@ -108,7 +115,6 @@ public class HomePage_Fragment extends Fragment {
         view_events.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new View_Events_Fragment()).addToBackStack(null);
                 fragmentTransaction.commit();
@@ -118,7 +124,6 @@ public class HomePage_Fragment extends Fragment {
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new Add_Event_Fragment()).addToBackStack(null);
                 fragmentTransaction.commit();
@@ -128,7 +133,6 @@ public class HomePage_Fragment extends Fragment {
         view_users.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new Users_Fragment()).addToBackStack(null);
                 fragmentTransaction.commit();
@@ -138,7 +142,6 @@ public class HomePage_Fragment extends Fragment {
         view_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new Profile_Fragment()).addToBackStack(null);
                 fragmentTransaction.commit();

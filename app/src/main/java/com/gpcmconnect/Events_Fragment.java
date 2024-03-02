@@ -2,12 +2,18 @@ package com.gpcmconnect;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.gridlayout.widget.GridLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -16,16 +22,15 @@ import java.util.ArrayList;
 
 public class Events_Fragment extends Fragment {
 
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> completed, ongoing;
-    TabLayout tabs;
-    TabLayout.Tab ongoingTab;
-    TabLayout.Tab completedTab;
+    GridLayout adminNavigator;
+    String designation;
+    CardView add_event, view_events;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onStart() {
+        super.onStart();
+        UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
+        designation = userDetailsManager.getDesignation();
     }
 
     @Override
@@ -33,43 +38,41 @@ public class Events_Fragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_events, container, false);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
-        ListView listView = view.findViewById(R.id.listOfEvents);
+        view_events = view.findViewById(R.id.view_events);
+        add_event = view.findViewById(R.id.add_event);
+        adminNavigator = view.findViewById(R.id.event_grid_for_admin);
+        UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
+        designation = userDetailsManager.getDesignation();
 
-        ongoing = new ArrayList<>();
-        ongoing.add("Summer 2024");
-        ongoing.add("Farewell");
-        ongoing.add("Competition");
+        Log.d("designation", "designation: " + designation);
 
-        completed = new ArrayList<>();
-        completed.add("Unit Test 1");
-        completed.add("Unit Test 2");
-        completed.add("Freshers");
-        completed.add("Competitions");
+        if(designation!=null && designation.equals("admin")) {
 
-        tabs = view.findViewById(R.id.tabs);
-        ongoingTab = tabs.getTabAt(0); // Index 0 for the first tab (ongoing_events)
-        completedTab = tabs.getTabAt(1);
+            adminNavigator.setVisibility(View.VISIBLE);
 
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        } else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new View_Events_Fragment()).addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
+        view_events.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.equals(ongoingTab)) {
-                    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ongoing);
-                } else if (tab.equals(completedTab)) {
-                    adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, completed);
-                }
-                listView.setAdapter(adapter);
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new View_Events_Fragment()).addToBackStack(null);
+                fragmentTransaction.commit();
             }
+        });
 
+        add_event.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                // Optional: handle unselection events
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                // Optional: handle reselection events
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new Add_Event_Fragment()).addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

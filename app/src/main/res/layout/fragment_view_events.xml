@@ -45,105 +45,15 @@
             android:layout_height="match_parent"
             tools:context=".View_Events_Fragment">
 
-            <!--   only for admin   -->
-            <androidx.gridlayout.widget.GridLayout
-                android:id="@+id/event_navigators"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                app:columnCount="1"
-                app:rowCount="2">
-
-                <!--      View Events      -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/view_events"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="25dp"
-                    app:layout_column="0"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="center_horizontal"
-                    app:layout_row="0"
-                    app:layout_rowWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/homepage_buttons"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:backgroundTint="@color/bg_color"
-                            android:contentDescription="@string/view_events"
-                            android:src="@drawable/events_icon_dark" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/view_events"
-                            android:textSize="17sp" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!--     Add Event (Only for admin)      -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/add_event"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    android:layout_margin="10dp"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="12dp"
-                    app:layout_column="0"
-                    app:layout_columnWeight="1"
-                    app:layout_gravity="center_horizontal"
-                    app:layout_row="1"
-                    app:layout_rowWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/homepage_buttons"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:backgroundTint="@color/bg_color"
-                            android:contentDescription="@string/add_event"
-                            android:src="@drawable/add_event_icon_dark" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/add_event"
-                            android:textSize="17sp" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </androidx.gridlayout.widget.GridLayout>
-
             <!--      this list changes as the tab will change      -->
+            <ListView
+                android:id="@+id/listOfEvents"
+                android:layout_width="match_parent"
+                android:layout_height="657dp"
+                app:layout_anchor="@+id/nestedScrollView"
+                app:layout_anchorGravity="center" />
 
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <ListView
-        android:id="@+id/listOfEvents"
-        android:layout_width="match_parent"
-        android:layout_height="657dp"
-        app:layout_anchor="@+id/nestedScrollView"
-        app:layout_anchorGravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

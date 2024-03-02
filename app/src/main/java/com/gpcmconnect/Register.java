@@ -107,6 +107,7 @@ public class Register extends AppCompatActivity {
             u.put("name", name.getText().toString());
             u.put("username", username.getText().toString());
             u.put("designation", designation.getText().toString());
+            u.put("email", email.getText().toString());
 
             db.collection("users").document(user.getUid())
                     .set(u)

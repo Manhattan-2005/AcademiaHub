@@ -1,6 +1,5 @@
 package com.gpcmconnect;
 
-import android.media.Image;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,25 +11,29 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class UserDetailsManager {
 
-    FirebaseUser user;
     FirebaseFirestore db;
-
     private static UserDetailsManager instance = null;
     private String email, name, designation;
     private String username;
-    private Image profile;
+
+    private ArrayList<String> names, emails, designations;
 
     private UserDetailsManager() {
-
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getUid());
+        names = new ArrayList<>();
+        emails = new ArrayList<>();
+        designations = new ArrayList<>();
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -38,6 +41,9 @@ public class UserDetailsManager {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         username = document.get("username").toString();
+                        email = document.get("email").toString();
+                        designation = document.get("designation").toString();
+                        name = document.get("name").toString();
                     } else {
                         Log.d("fetch_exception", "No such document");
                     }
@@ -47,10 +53,43 @@ public class UserDetailsManager {
             }
         });
 
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                String userEmail = document.getString("email");
+                                String userDesignation = document.getString("designation");
+                                String userName = document.getString("name");
+
+                                if(userName.equals("admin") || userName.equals("ETC")){
+                                    continue;
+                                }
+                                names.add(userName);
+                                emails.add(userEmail);
+                                designations.add(userDesignation);
+
+                            }
+                        } else {
+                            Log.d("fetch_exception", "get failed with ", task.getException());
+                        }
+                    }
+                });
+
     }
 
-    public interface UsernameListener {
-        void onUsernameRetrieved(String username);
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDesignation() {
+        return designation;
     }
 
     public static synchronized UserDetailsManager getInstance() {
@@ -61,26 +100,25 @@ public class UserDetailsManager {
     }
 
     public String getUsername() {
-        if(username != null) {
-            return username;
-        } else {
-            return null;
-        }
+        return username;
     }
-
-//    public Map<String, Object> getUserDetails() {
-//        HashMap<String, Object> userDetails = new HashMap<String, Object>();
-//        userDetails.put("name", name);
-//        userDetails.put("email", email);
-//        userDetails.put("designation", designation);
-//        userDetails.put("username", username);
-//        userDetails.put("profile", profile);
-//
-//        return userDetails;
-//    }
 
     public void clearUserDetails() {
         instance = null;
     }
 
+    public ArrayList<String> getNames() {
+        return names;
+    }
+
+    public ArrayList<String> getEmails() {
+        return emails;
+    }
+
+    public ArrayList<String> getDesignations() {
+        return designations;
+    }
+
 }
+
+
