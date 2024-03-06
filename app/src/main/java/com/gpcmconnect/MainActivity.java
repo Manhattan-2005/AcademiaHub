@@ -1,9 +1,11 @@
 package com.gpcmconnect;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.window.OnBackInvokedDispatcher;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState == null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fragment_container, new HomePage_Fragment());
+            transaction.replace(R.id.fragment_container, new HomePage_Fragment()).addToBackStack("home_page");
             transaction.commit();
         }
 
@@ -102,5 +103,18 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack("home_page", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            bottomNavigationView.setSelectedItemId(R.id.bottom_home);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 
 }

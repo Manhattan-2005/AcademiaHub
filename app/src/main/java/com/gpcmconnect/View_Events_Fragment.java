@@ -42,7 +42,7 @@ public class View_Events_Fragment extends Fragment {
         completed.add("Competitions");
 
         tabs = view.findViewById(R.id.tabs);
-        ongoingTab = tabs.getTabAt(0); // Index 0 for the first tab (ongoing_events)
+        ongoingTab = tabs.getTabAt(0);
         completedTab = tabs.getTabAt(1);
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ongoing);
         listView.setAdapter(adapter);

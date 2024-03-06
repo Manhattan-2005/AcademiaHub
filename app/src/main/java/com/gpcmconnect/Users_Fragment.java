@@ -1,6 +1,7 @@
 package com.gpcmconnect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -18,7 +19,7 @@ import com.google.firebase.firestore.auth.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Users_Fragment extends Fragment {
+public class Users_Fragment extends Fragment implements UserDetailsManager.AllUserDetailsListener {
 
     ArrayList<String> names, designations, emails;
     ListView userList;
@@ -31,6 +32,7 @@ public class Users_Fragment extends Fragment {
         names = userDetailsManager.getNames();
         emails = userDetailsManager.getEmails();
         designations = userDetailsManager.getDesignations();
+        userDetailsManager.addAllUserDetailsListener(this);
     }
 
     @Override
@@ -39,10 +41,28 @@ public class Users_Fragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_users, container, false);
 
         userList = view.findViewById(R.id.userList);
-        adapter = new User_List_Adapter(getContext(), names, emails, designations);
-        userList.setAdapter(adapter);
+        updateUI();
 
         return view;
+    }
+
+    public void updateUI(){
+        adapter = new User_List_Adapter(getContext(), names, emails, designations);
+        userList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onAllUserDetailsUpdated() {
+        names = UserDetailsManager.getInstance().getNames();
+        emails = UserDetailsManager.getInstance().getEmails();
+        designations = UserDetailsManager.getInstance().getDesignations();
+        updateUI();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        UserDetailsManager.getInstance().removeAllUserDetailsListener(this);
     }
 
 }

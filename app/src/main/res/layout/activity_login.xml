@@ -5,38 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:padding="16dp"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".Login">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/login"
         android:textSize="28sp"
-        android:textStyle="bold"
-        android:gravity="center" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_email"
-        android:textSize="18sp"
-        android:background="@drawable/input_fields"
         android:layout_marginTop="32dp"
-        android:padding="18sp" />
+        android:background="@drawable/input_fields"
+        android:hint="@string/enter_email"
+        android:padding="18sp"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/input_fields"
         android:hint="@string/enter_password"
         android:inputType="textWebPassword"
-        android:textSize="18sp"
-        android:background="@drawable/input_fields"
-        android:layout_marginTop="16dp"
-        android:padding="18sp" />
+        android:padding="18sp"
+        android:textSize="18sp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -60,11 +60,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:padding="15sp"
         android:text="@string/new_to_gp_cm_connect_register_here"
         android:textColor="@color/blue"
-        android:textStyle="bold"
-        android:focusable="true" />
+        android:textStyle="bold" />
 
 </LinearLayout>

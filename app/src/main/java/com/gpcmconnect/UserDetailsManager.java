@@ -1,5 +1,7 @@
 package com.gpcmconnect;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,12 @@ import java.util.Map;
 
 public class UserDetailsManager {
 
+    private static List<AllUserDetailsListener> userDetailsListeners = new ArrayList<>();
+
+    public interface AllUserDetailsListener {
+        void onAllUserDetailsUpdated();
+    }
+
     FirebaseFirestore db;
     private static UserDetailsManager instance = null;
     private String email, name, designation;
@@ -28,12 +36,18 @@ public class UserDetailsManager {
     private ArrayList<String> names, emails, designations;
 
     private UserDetailsManager() {
+
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+
+        }
+
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getUid());
         names = new ArrayList<>();
         emails = new ArrayList<>();
         designations = new ArrayList<>();
 
+        //Retrieving the details of the current user
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -53,30 +67,66 @@ public class UserDetailsManager {
             }
         });
 
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                String userEmail = document.getString("email");
-                                String userDesignation = document.getString("designation");
-                                String userName = document.getString("name");
+        //Retrieving the details of all the users for Users_Fragment
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    names.clear();
+                    emails.clear();
+                    designations.clear();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        String userEmail = document.getString("email");
+                        String userDesignation = document.getString("designation");
+                        String userName = document.getString("name");
 
-                                if(userName.equals("admin") || userName.equals("ETC")){
-                                    continue;
-                                }
-                                names.add(userName);
-                                emails.add(userEmail);
-                                designations.add(userDesignation);
-
-                            }
-                        } else {
-                            Log.d("fetch_exception", "get failed with ", task.getException());
+                        if (userName.equals("admin") || userName.equals("ETC")) {
+                            continue;
                         }
+                        names.add(userName);
+                        emails.add(userEmail);
+                        designations.add(userDesignation);
+
                     }
-                });
+                } else {
+                    Log.d("fetch_exception", "get failed with ", task.getException());
+                }
+            }
+        });
+
+        //Adding a listener on users collection for receiving a real time update on data change
+        db.collection("users").addSnapshotListener((querySnapshot, e) -> {
+            if (e != null) {
+                Log.d("Fetch_Exception", "Listen failed.", e);
+                return;
+            }
+
+            if (querySnapshot != null) {
+
+                //Clearing the Array Lists for rewriting of new data
+                names.clear();
+                emails.clear();
+                designations.clear();
+
+                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                    String userEmail = document.getString("email");
+                    String userDesignation = document.getString("designation");
+                    String userName = document.getString("name");
+
+                    if (userName.equals("admin") || userName.equals("ETC")) {
+                        continue;
+                    }
+
+                    names.add(userName);
+                    emails.add(userEmail);
+                    designations.add(userDesignation);
+                }
+
+                notifyAllUserDetailsListeners();
+            } else {
+                Log.d("Fetch_Exception", "Current data: null");
+            }
+        });
 
     }
 
@@ -117,6 +167,20 @@ public class UserDetailsManager {
 
     public ArrayList<String> getDesignations() {
         return designations;
+    }
+
+    public void addAllUserDetailsListener(AllUserDetailsListener listener) {
+        userDetailsListeners.add(listener);
+    }
+
+    public void removeAllUserDetailsListener(AllUserDetailsListener listener) {
+        userDetailsListeners.remove(listener);
+    }
+
+    private void notifyAllUserDetailsListeners() {
+        for (AllUserDetailsListener listener : userDetailsListeners) {
+            listener.onAllUserDetailsUpdated();
+        }
     }
 
 }
