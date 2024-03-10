@@ -42,7 +42,7 @@ public class Register extends AppCompatActivity {
         login = findViewById(R.id.loginButton);
         register = findViewById(R.id.registerButton);
 
-        String[] designations = {"Select Designation", "Student", "Faculty", "HOD"};
+        String[] designations = {"Select Designation", "Student", "Faculty"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, designations);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         designation.setAdapter(adapter);

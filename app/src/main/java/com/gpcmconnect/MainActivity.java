@@ -1,8 +1,10 @@
 package com.gpcmconnect;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -31,6 +34,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +110,15 @@ public class MainActivity extends AppCompatActivity {
 
         addNameAndEmail();
 
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                handleNavigationItemSelected(item);
+                return true;
+            }
+        });
+
     }
 
     public void addNameAndEmail() {
@@ -156,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             replaceFragment(new HomePage_Fragment());
         } else if (itemId == R.id.nav_about) {
             // Handle about us item click
-            // Implement your logic to show about us fragment or activity
+            openAboutUsTextFile();
         } else if (itemId == R.id.instagram) {
             // Handle Instagram item click
             openSocialMediaProfile("https://www.instagram.com/manhattan2005");
@@ -174,6 +187,31 @@ public class MainActivity extends AppCompatActivity {
         // Close the drawer after handling the item click
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+
+    private void openAboutUsTextFile() {
+        // Replace "your_file_name.txt" with the actual name of your text file
+        File file = new File(Environment.getExternalStorageDirectory(), "your_file_name.txt");
+
+        if (file.exists()) {
+            // If the file exists, open it using an implicit intent
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+            intent.setDataAndType(uri, "text/plain");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                // Handle the case where no activity can handle the intent
+                e.printStackTrace();
+                Toast.makeText(this, "No app found to open the file", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Handle the case where the file doesn't exist
+            Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -198,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.commit();
     }
-
 
     @Override
     public void onBackPressed() {

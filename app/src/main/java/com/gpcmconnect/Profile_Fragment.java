@@ -1,64 +1,108 @@
 package com.gpcmconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Profile_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
+import java.util.Objects;
+
 public class Profile_Fragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Profile_Fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Profile_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Profile_Fragment newInstance(String param1, String param2) {
-        Profile_Fragment fragment = new Profile_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    String username, name, email, designation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        UserDetailsManager userDetailsManager = UserDetailsManager.getInstance();
+        username = userDetailsManager.getUsername();
+        name = userDetailsManager.getName();
+        email = userDetailsManager.getEmail();
+        designation = userDetailsManager.getDesignation();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view =  inflater.inflate(R.layout.fragment_profile, container, false);
+
+        TextView nameView = view.findViewById(R.id.name);
+        TextView usernameView = view.findViewById(R.id.username);
+        TextView emailView = view.findViewById(R.id.email);
+        TextView designationView = view.findViewById(R.id.designation);
+        Button logout = view.findViewById(R.id.logout);
+
+        if(name != null){
+
+            nameView.setText(name);
+            usernameView.setText(username);
+            emailView.setText(email);
+            designationView.setText(designation);
+
+        } else {
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+            //else retrieve username from the FireStore (db)
+            DocumentReference docRef = db.collection("users").document(uid);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+
+                            name = Objects.requireNonNull(document.get("name")).toString();
+                            email = Objects.requireNonNull(document.get("email")).toString();
+                            username = Objects.requireNonNull(document.get("username")).toString();
+                            designation = Objects.requireNonNull(document.get("designation")).toString();
+
+                            nameView.setText(name);
+                            usernameView.setText(username);
+                            emailView.setText(email);
+                            designationView.setText(designation);
+
+                        } else {
+                            Log.d("fetch_exception", "No such document");
+                        }
+                    } else {
+                        Log.d("fetch_exception", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                UserDetailsManager.getInstance().clearUserDetails();
+                EventDetailsManager.getInstance().clearEventDetails();
+                Toast.makeText(getContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), Login.class);
+                startActivity(intent);
+                onDestroy();
+            }
+        });
+
+        return view;
     }
 }

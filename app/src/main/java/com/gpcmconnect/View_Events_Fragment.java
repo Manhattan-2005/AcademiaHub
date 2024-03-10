@@ -319,7 +319,7 @@ public class View_Events_Fragment extends Fragment implements EventDetailsManage
         notificationIntent.putExtra("eventDate", eventDate);
         notificationIntent.putExtra("eventDescription", eventDescription);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         AlarmManager alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
