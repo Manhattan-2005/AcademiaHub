@@ -1,24 +1,15 @@
 package com.gpcmconnect;
 
 import android.os.Bundle;
-
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.gridlayout.widget.GridLayout;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListView;
-
-import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
 
 public class Events_Fragment extends Fragment {
 
@@ -38,7 +29,7 @@ public class Events_Fragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_events, container, false);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
         view_events = view.findViewById(R.id.view_events);
         add_event = view.findViewById(R.id.add_event);

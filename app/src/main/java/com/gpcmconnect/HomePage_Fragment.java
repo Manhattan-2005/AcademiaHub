@@ -1,7 +1,6 @@
 package com.gpcmconnect;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +27,7 @@ import java.util.Objects;
 public class HomePage_Fragment extends Fragment {
 
     FirebaseUser user;
+    String name, email;
     FirebaseFirestore db;
     String username, designation;
     CardView add_event, view_events, view_users, view_profile, view_syllabus;
@@ -53,7 +51,7 @@ public class HomePage_Fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         TextView greet = view.findViewById(R.id.username);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
         //initialise the CardViews
         view_events = view.findViewById(R.id.view_events);
@@ -79,7 +77,7 @@ public class HomePage_Fragment extends Fragment {
             if(username != null) {
 
                 //set the username to the textview
-                greet.setText("Hello, " + username);
+                greet.setText(String.format("Hello, %s", username));
 
             } else {
 
@@ -91,8 +89,8 @@ public class HomePage_Fragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                username = document.get("username").toString();
-                                greet.setText("Hello, " + username);
+                                username = Objects.requireNonNull(document.get("username")).toString();
+                                greet.setText(String.format("Hello, %s", username));
                             } else {
                                 Log.d("fetch_exception", "No such document");
                             }

@@ -7,68 +7,96 @@
     android:id="@+id/fragment_container"
     tools:context=".Add_Event_Fragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent" >
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/new_event"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/eventName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/input_fields"
-            android:hint="Enter Event Name"
-            android:padding="18sp"
-            android:textSize="18sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/new_event"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/input_fields"
-            android:hint="@string/select_date"
-            android:inputType="date"
-            android:padding="18sp"
-            android:textSize="18sp" />
+            <EditText
+                android:id="@+id/eventName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/input_fields"
+                android:hint="Enter Event Name"
+                android:padding="18sp"
+                android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/input_fields"
-            android:hint="@string/select_time"
-            android:inputType="time"
-            android:padding="18sp"
-            android:textSize="18sp" />
+            <EditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_fields"
+                android:hint="@string/select_date"
+                android:inputType="date"
+                android:padding="18sp"
+                android:textSize="18sp" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:visibility="gone" />
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_fields"
+                android:hint="@string/select_time"
+                android:inputType="time"
+                android:padding="18sp"
+                android:textSize="18sp" />
 
+            <Spinner
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_fields"
+                android:tooltipText="@string/select_category"
+                android:padding="18sp"
+                android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/addEventButton"
-            android:layout_width="140dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="32dp"
-            android:text="Add Event"
-            android:textSize="20sp" />
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/input_fields"
+                android:hint="@string/add_short_description"
+                android:padding="18sp"
+                android:textSize="18sp"/>
 
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/addEventButton"
+                android:layout_width="140dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/add_event"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

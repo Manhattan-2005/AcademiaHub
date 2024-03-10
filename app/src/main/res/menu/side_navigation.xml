@@ -4,20 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
-    <group
-        android:checkableBehavior="single">
+    <item
+        android:title="Basic Actions" >
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/home_icon"
+                android:title="@string/home"/>
 
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/home_icon"
-            android:title="@string/home"/>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/about_us_icon"
+                android:title="@string/about_us"/>
+        </menu>
 
-        <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/about_us_icon"
-            android:title="@string/about_us"/>
-
-    </group>
+    </item>
     <item
         android:title="@string/follow_us_on">
         <menu>
@@ -42,8 +43,8 @@
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:onClick="logoutUser"
                 android:icon="@drawable/logout_icon"
+                android:onClick="logoutUser"
                 android:title="@string/logout" />
         </menu>
 

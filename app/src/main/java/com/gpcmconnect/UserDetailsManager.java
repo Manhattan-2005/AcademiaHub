@@ -1,11 +1,8 @@
 package com.gpcmconnect;
 
-import android.app.Activity;
-import android.content.Intent;
+
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,11 +11,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public class UserDetailsManager {
 
@@ -30,42 +25,41 @@ public class UserDetailsManager {
 
     FirebaseFirestore db;
     private static UserDetailsManager instance = null;
-    private String email, name, designation;
+    private String name, designation, email;
     private String username;
 
     private ArrayList<String> names, emails, designations;
 
     private UserDetailsManager() {
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
-
-        }
-
         db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("users").document(FirebaseAuth.getInstance().getUid());
-        names = new ArrayList<>();
-        emails = new ArrayList<>();
-        designations = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            DocumentReference docRef = db.collection("users").document(user.getUid());
+            names = new ArrayList<>();
+            emails = new ArrayList<>();
+            designations = new ArrayList<>();
 
-        //Retrieving the details of the current user
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        username = document.get("username").toString();
-                        email = document.get("email").toString();
-                        designation = document.get("designation").toString();
-                        name = document.get("name").toString();
+            //Retrieving the details of the current user
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            username = Objects.requireNonNull(document.get("username")).toString();
+                            designation = Objects.requireNonNull(document.get("designation")).toString();
+                            name = Objects.requireNonNull(document.get("name")).toString();
+                            email = Objects.requireNonNull(document.get("email")).toString();
+                        } else {
+                            Log.d("fetch_exception", "No such document");
+                        }
                     } else {
-                        Log.d("fetch_exception", "No such document");
+                        Log.d("fetch_exception", "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d("fetch_exception", "get failed with ", task.getException());
                 }
-            }
-        });
+            });
+        }
 
         //Retrieving the details of all the users for Users_Fragment
         db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -80,9 +74,12 @@ public class UserDetailsManager {
                         String userDesignation = document.getString("designation");
                         String userName = document.getString("name");
 
-                        if (userName.equals("admin") || userName.equals("ETC")) {
-                            continue;
+                        if(userName != null){
+                            if (userName.equals("admin")) {
+                                continue;
+                            }
                         }
+
                         names.add(userName);
                         emails.add(userEmail);
                         designations.add(userDesignation);
@@ -113,7 +110,7 @@ public class UserDetailsManager {
                     String userDesignation = document.getString("designation");
                     String userName = document.getString("name");
 
-                    if (userName.equals("admin") || userName.equals("ETC")) {
+                    if  (userName != null && (userName.equals("admin") || userName.equals("ETC"))) {
                         continue;
                     }
 
@@ -130,12 +127,12 @@ public class UserDetailsManager {
 
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getDesignation() {
@@ -154,7 +151,9 @@ public class UserDetailsManager {
     }
 
     public void clearUserDetails() {
-        instance = null;
+         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+         if(user != null)
+             instance = null;
     }
 
     public ArrayList<String> getNames() {

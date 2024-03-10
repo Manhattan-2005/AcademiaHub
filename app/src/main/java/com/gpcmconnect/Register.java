@@ -2,13 +2,11 @@ package com.gpcmconnect;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,9 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,12 +22,10 @@ public class Register extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText name, email, password, username;
-    AutoCompleteTextView designation;
+    Spinner designation;
     Button register;
     TextView login;
     ProgressBar progressBar;
-    String[] user_types = {"Student", "Faculty", "HOD"};
-    ArrayAdapter<String> userTypesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +38,14 @@ public class Register extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         designation = findViewById(R.id.designation);
-        designation.setThreshold(1);
-        userTypesAdapter  = new ArrayAdapter<String>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item , user_types);
-        designation.setAdapter(userTypesAdapter);
         progressBar = findViewById(R.id.progressBar);
         login = findViewById(R.id.loginButton);
         register = findViewById(R.id.registerButton);
+
+        String[] designations = {"Select Designation", "Student", "Faculty", "HOD"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, designations);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        designation.setAdapter(adapter);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +82,7 @@ public class Register extends AppCompatActivity {
                                     name.setText("");
                                     email.setText("");
                                     password.setText("");
-                                    designation.setText("");
+                                    designation.setSelection(0);
                                 }
                             }
                         });
@@ -101,12 +97,12 @@ public class Register extends AppCompatActivity {
         if(!name.getText().toString().equals("") &&
                 !email.getText().toString().equals("") &&
                     !password.getText().toString().equals("") &&
-                        !designation.getText().toString().equals("")) {
+                        !designation.getSelectedItem().toString().equals("Select Designation")) {
 
             Map<String, String> u = new HashMap<>();
             u.put("name", name.getText().toString());
             u.put("username", username.getText().toString());
-            u.put("designation", designation.getText().toString());
+            u.put("designation", designation.getSelectedItem().toString());
             u.put("email", email.getText().toString());
 
             db.collection("users").document(user.getUid())
@@ -133,7 +129,7 @@ public class Register extends AppCompatActivity {
                             name.setText("");
                             email.setText("");
                             password.setText("");
-                            designation.setText("");
+                            designation.setSelection(0);
                         }
                     });
         } else {
