@@ -27,7 +27,6 @@ import java.util.Objects;
 public class HomePage_Fragment extends Fragment {
 
     FirebaseUser user;
-    String name, email;
     FirebaseFirestore db;
     String username, designation;
     CardView add_event, view_events, view_users, view_profile, view_syllabus;
@@ -158,4 +157,17 @@ public class HomePage_Fragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        UserDetailsManager.getInstance().clearUserDetails();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        UserDetailsManager.getInstance().clearUserDetails();
+    }
+
 }

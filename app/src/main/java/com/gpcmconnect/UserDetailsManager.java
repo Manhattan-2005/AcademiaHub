@@ -34,11 +34,13 @@ public class UserDetailsManager {
 
         db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        names = new ArrayList<>();
+        emails = new ArrayList<>();
+        designations = new ArrayList<>();
+
         if(user != null) {
             DocumentReference docRef = db.collection("users").document(user.getUid());
-            names = new ArrayList<>();
-            emails = new ArrayList<>();
-            designations = new ArrayList<>();
 
             //Retrieving the details of the current user
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -151,8 +153,6 @@ public class UserDetailsManager {
     }
 
     public void clearUserDetails() {
-         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-         if(user != null)
              instance = null;
     }
 

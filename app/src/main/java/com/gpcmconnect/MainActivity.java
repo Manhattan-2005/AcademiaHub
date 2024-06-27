@@ -159,10 +159,9 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.nav_home) {
             replaceFragment(new HomePage_Fragment());
         } else if (itemId == R.id.nav_about) {
-            // Write data to the file
-            writeDataToFile();
-            // Open the file using implicit intent
-            openFileWithImplicitIntent();
+
+
+
         } else if (itemId == R.id.instagram) {
             openSocialMediaProfile("https://www.instagram.com/manhattan2005");
         } else if (itemId == R.id.linkedin) {
@@ -177,69 +176,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    private void writeDataToFile() {
-        File directory = new File(getExternalFilesDir(null), DIRECTORY_NAME);
-        File file = new File(directory, FILE_NAME);
-
-        // Check if the file already exists
-        if (file.exists()) {
-            // File exists, no need to rewrite
-            return;
-        }
-
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            // External storage is available
-            // Proceed with file operations
-        } else {
-            // External storage is not available
-            Toast.makeText(this, "External storage not available", Toast.LENGTH_SHORT).show();
-        }
-
-        // Create the directory if it doesn't exist
-        if (!directory.exists() && !directory.mkdirs()) {
-            // If creating directories fails, show an error message and return
-            Toast.makeText(this, "Error creating directories.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Write data to the file
-        try {
-            FileWriter writer = new FileWriter(file);
-            writer.append("Hello there!");
-            writer.append("\nThis application was created as a micro-project for the subject of MAD");
-            writer.append("\nWe are a team of two members Shivpratap Mithapalli and Pratik Salunke");
-            writer.append("\nWe aim to achieve many great milestones and this is just the beginning.");
-            writer.flush();
-            writer.close();
-            Toast.makeText(this, "Data written to file: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("ErrorFile", Objects.requireNonNull(e.getMessage()));
-            Toast.makeText(this, "Error writing data to file.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    private void openFileWithImplicitIntent() {
-        File directory = new File(getExternalFilesDir(null), DIRECTORY_NAME);
-        File file = new File(directory, FILE_NAME);
-
-        if (file.exists()) {
-            Uri fileUri = FileProvider.getUriForFile(this, "com.gpcmconnect.fileprovider", file);
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(fileUri, "text/plain");
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "File not found.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
     private void openSocialMediaProfile(String profileUrl) {
-        // Implement logic to open the social media profile in a browser or your preferred way
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(profileUrl));
         startActivity(intent);
     }
@@ -264,11 +201,33 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (fragmentManager.getBackStackEntryCount() > 0) {
+        if ((fragmentManager.getBackStackEntryCount() > 0) && (bottomNavigationView.getSelectedItemId() != R.id.bottom_home)) {
             fragmentManager.popBackStack("home_page", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         } else {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UserDetailsManager.getInstance().clearUserDetails();
+        EventDetailsManager.getInstance().clearEventDetails();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        UserDetailsManager.getInstance().clearUserDetails();
+        EventDetailsManager.getInstance().clearEventDetails();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        UserDetailsManager.getInstance().clearUserDetails();
+        EventDetailsManager.getInstance().clearEventDetails();
+    }
+
 }
